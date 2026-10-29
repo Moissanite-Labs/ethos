@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1",
+  "preference_id": "pref-example-1",
+  "revision_id": "rev-invalid-inference",
+  "parent_revision_ids": [
+    "rev-example-1"
+  ],
+  "owner_id": "owner-example",
+  "author_id": "agent-example",
+  "status": "active",
+  "origin": "inferred",
+  "statement": "Prefer concise explanations with a short example.",
+  "scope": {
+    "contexts": [
+      "writing"
+    ]
+  },
+  "source": {
+    "kind": "observation",
+    "reference": "source-example-2"
+  }
+}
