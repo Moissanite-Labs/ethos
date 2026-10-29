@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1",
+  "preference_id": "pref-example-1",
+  "revision_id": "rev-example-4",
+  "parent_revision_ids": [
+    "rev-example-1"
+  ],
+  "owner_id": "owner-example",
+  "author_id": "owner-example",
+  "status": "rejected",
+  "origin": "explicit",
+  "statement": "Use concise explanations by default.",
+  "scope": {
+    "contexts": [
+      "writing"
+    ]
+  },
+  "source": {
+    "kind": "user",
+    "reference": "source-example-1"
+  }
+}
