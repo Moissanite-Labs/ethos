@@ -11,12 +11,15 @@ def load(name):
 
 
 def problems(record):
+    if not isinstance(record, dict):
+        return ["record must be an object"]
     errors = []
     required = {"schema_version", "preference_id", "revision_id", "parent_revision_ids", "owner_id", "author_id", "status"}
     allowed = required | {"origin", "statement", "confidence", "scope", "source"}
     if required - record.keys() or record.keys() - allowed:
         errors.append("missing or unknown fields")
-    if record.get("schema_version") != "0.1" or record.get("status") not in {"active", "rejected", "deleted"}:
+    status = record.get("status")
+    if record.get("schema_version") != "0.1" or not isinstance(status, str) or status not in {"active", "rejected", "deleted"}:
         errors.append("version or status")
     for key in ("preference_id", "revision_id", "owner_id", "author_id"):
         if not isinstance(record.get(key), str) or not record[key]:
@@ -24,12 +27,18 @@ def problems(record):
     parents = record.get("parent_revision_ids")
     if not isinstance(parents, list) or any(not isinstance(x, str) or not x for x in parents) or len(set(parents)) != len(parents):
         errors.append("parents")
-    fields = {"origin", "statement", "scope", "source"}
-    if record.get("status") == "deleted":
-        if (fields | {"confidence"}) & record.keys():
-            errors.append("tombstone contains preference data")
     else:
-        if fields - record.keys() or record.get("origin") not in {"explicit", "inferred"} or not isinstance(record.get("statement"), str) or not record.get("statement"):
+        if status in ("rejected", "deleted") and not parents:
+            errors.append("rejection or deletion requires a parent")
+        if record.get("revision_id") in parents:
+            errors.append("self parent")
+    fields = {"origin", "statement", "scope", "source"}
+    if status in ("deleted", "rejected"):
+        if (fields | {"confidence"}) & record.keys():
+            errors.append("rejection or tombstone contains preference data")
+    else:
+        origin = record.get("origin")
+        if fields - record.keys() or not isinstance(origin, str) or origin not in {"explicit", "inferred"} or not isinstance(record.get("statement"), str) or not record.get("statement"):
             errors.append("preference fields")
         if record.get("origin") == "inferred":
             c = record.get("confidence")
@@ -52,9 +61,46 @@ class Fixtures(unittest.TestCase):
                 self.assertEqual(problems(load(name)), [])
 
     def test_invalid(self):
+        for name, expected in (("invalid-inference.json", "inference confidence"), ("invalid-tombstone.json", "rejection or tombstone contains preference data")):
+            with self.subTest(name=name):
+                self.assertIn(expected, problems(load(name)))
+
+    def test_invalid_parents(self):
+        for name in ("rejected.json", "tombstone.json"):
+            with self.subTest(name=name):
+                self.assertIn("rejection or deletion requires a parent", problems(dict(load(name), parent_revision_ids=[])))
+        r = load("explicit.json")
+        self.assertIn("self parent", problems(dict(r, parent_revision_ids=[r["revision_id"]])))
+
+    def test_malformed_inputs_return_errors(self):
+        for r in ([], dict(load("explicit.json"), status=[]), dict(load("explicit.json"), origin={}), dict(load("explicit.json"), parent_revision_ids=[{}]), dict(load("explicit.json"), scope={"contexts":[{}]})):
+            with self.subTest(record=r):
+                self.assertTrue(problems(r))
+
+    def test_fixture_revision_ids_are_unique(self):
+        records = [json.loads(p.read_text()) for p in (ROOT / "fixtures").glob("*.json")]
+        ids = [r["revision_id"] for r in records]
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_full_json_schema_when_available(self):
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            self.skipTest("optional jsonschema package is not installed")
+        schema = json.loads((ROOT / "schema.json").read_text())
+        Draft202012Validator.check_schema(schema)
+        validator = Draft202012Validator(schema)
+        for name in ("explicit.json", "inferred.json", "tombstone.json", "rejected.json"):
+            with self.subTest(name=name):
+                self.assertEqual(list(validator.iter_errors(load(name))), [])
         for name in ("invalid-inference.json", "invalid-tombstone.json"):
             with self.subTest(name=name):
-                self.assertTrue(problems(load(name)))
+                self.assertTrue(list(validator.iter_errors(load(name))))
+        for name in ("rejected.json", "tombstone.json"):
+            with self.subTest(name=name, case="empty parents"):
+                self.assertTrue(list(validator.iter_errors(dict(load(name), parent_revision_ids=[]))))
+        with self.subTest(case="rejection carries payload"):
+            self.assertTrue(list(validator.iter_errors(dict(load("rejected.json"), statement="sensitive"))))
 
     def test_concurrent_delete_and_edit_share_parent(self):
         original, edit, tombstone = (load(n) for n in ("explicit.json", "inferred.json", "tombstone.json"))

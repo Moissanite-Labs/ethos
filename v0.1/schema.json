@@ -103,7 +103,10 @@
       "if": {
         "properties": {
           "status": {
-            "const": "deleted"
+            "enum": [
+              "rejected",
+              "deleted"
+            ]
           }
         },
         "required": [
@@ -183,6 +186,28 @@
           "required": [
             "confidence"
           ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "rejected",
+              "deleted"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "parent_revision_ids": {
+            "minItems": 1
+          }
         }
       }
     }

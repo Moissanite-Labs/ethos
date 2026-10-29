@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "preference_id": "pref-example-1",
-  "revision_id": "rev-example-2",
+  "revision_id": "rev-invalid-inference",
   "parent_revision_ids": [
     "rev-example-1"
   ],
