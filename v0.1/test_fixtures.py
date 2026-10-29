@@ -69,6 +69,13 @@ class Fixtures(unittest.TestCase):
         self.assertEqual(rejection["owner_id"], rejection["author_id"])
         self.assertEqual(rejection["status"], "rejected")
 
+    def test_inferred_descendant_does_not_encode_owner_approval(self):
+        original, proposal = load("explicit.json"), load("inferred.json")
+        self.assertEqual(proposal["parent_revision_ids"], [original["revision_id"]])
+        self.assertNotEqual(proposal["author_id"], proposal["owner_id"])
+        self.assertNotIn("approval", proposal)
+        self.assertNotIn("proposal", proposal)
+
     def test_schema_and_fixture_enums_match(self):
         schema = json.loads((ROOT / "schema.json").read_text())
         self.assertEqual(schema["properties"]["schema_version"]["const"], "0.1")
