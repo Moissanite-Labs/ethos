@@ -1,6 +1,6 @@
 # Ethos
 
-Ethos proposes a common format for carrying a person's preferences between agent tools. Owners can inspect, correct, reject and delete preferences. A learned preference provides context; it does not grant permission to act.
+Ethos proposes a common format for carrying a person's preferences between agent tools. Owners can inspect, correct, reject and delete preferences. A learned preference provides context. It does not grant permission to act.
 
 The repository contains a **draft v0.1 specification**, a JSON Schema and example records. It does not yet provide harness adapters, synchronization, identity verification or authorization. Passing schema validation does not establish consent or make a preference effective.
 
