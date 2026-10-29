@@ -99,8 +99,13 @@ class Fixtures(unittest.TestCase):
         for name in ("rejected.json", "tombstone.json"):
             with self.subTest(name=name, case="empty parents"):
                 self.assertTrue(list(validator.iter_errors(dict(load(name), parent_revision_ids=[]))))
-        with self.subTest(case="rejection carries payload"):
-            self.assertTrue(list(validator.iter_errors(dict(load("rejected.json"), statement="sensitive"))))
+        with self.subTest(case="explicit confidence"):
+            self.assertTrue(list(validator.iter_errors(dict(load("explicit.json"), confidence=0.5))))
+        example = load("inferred.json")
+        for name in ("rejected.json", "tombstone.json"):
+            for field in ("origin", "statement", "confidence", "scope", "source"):
+                with self.subTest(name=name, forbidden_field=field):
+                    self.assertTrue(list(validator.iter_errors(dict(load(name), **{field: example[field]}))))
 
     def test_concurrent_delete_and_edit_share_parent(self):
         original, edit, tombstone = (load(n) for n in ("explicit.json", "inferred.json", "tombstone.json"))
