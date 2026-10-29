@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ethos v0.1 proposed revision",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "preference_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_revision_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "owner_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "author_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "active",
+        "rejected",
+        "deleted"
+      ]
+    },
+    "origin": {
+      "enum": [
+        "explicit",
+        "inferred"
+      ]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "contexts"
+      ],
+      "properties": {
+        "contexts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "kind",
+        "reference"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "preference_id",
+    "revision_id",
+    "parent_revision_ids",
+    "owner_id",
+    "author_id",
+    "status"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "deleted"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "origin"
+              ]
+            },
+            {
+              "required": [
+                "statement"
+              ]
+            },
+            {
+              "required": [
+                "confidence"
+              ]
+            },
+            {
+              "required": [
+                "scope"
+              ]
+            },
+            {
+              "required": [
+                "source"
+              ]
+            }
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "origin",
+          "statement",
+          "scope",
+          "source"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "const": "inferred"
+          }
+        },
+        "required": [
+          "origin"
+        ]
+      },
+      "then": {
+        "required": [
+          "confidence"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "const": "explicit"
+          }
+        },
+        "required": [
+          "origin"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "confidence"
+          ]
+        }
+      }
+    }
+  ]
+}
