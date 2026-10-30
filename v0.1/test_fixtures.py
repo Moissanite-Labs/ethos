@@ -72,6 +72,14 @@ class Fixtures(unittest.TestCase):
         r = load("explicit.json")
         self.assertIn("self parent", problems(dict(r, parent_revision_ids=[r["revision_id"]])))
 
+    def test_confidence_and_payload_rules(self):
+        self.assertIn("explicit confidence", problems(dict(load("explicit.json"), confidence=0.5)))
+        example = dict(load("explicit.json"), confidence=0.5)
+        for name in ("rejected.json", "tombstone.json"):
+            for field in ("origin", "statement", "confidence", "scope", "source"):
+                with self.subTest(name=name, forbidden_field=field):
+                    self.assertIn("rejection or tombstone contains preference data", problems(dict(load(name), **{field: example[field]})))
+
     def test_malformed_inputs_return_errors(self):
         for r in ([], dict(load("explicit.json"), status=[]), dict(load("explicit.json"), origin={}), dict(load("explicit.json"), parent_revision_ids=[{}]), dict(load("explicit.json"), scope={"contexts":[{}]})):
             with self.subTest(record=r):
@@ -101,7 +109,7 @@ class Fixtures(unittest.TestCase):
                 self.assertTrue(list(validator.iter_errors(dict(load(name), parent_revision_ids=[]))))
         with self.subTest(case="explicit confidence"):
             self.assertTrue(list(validator.iter_errors(dict(load("explicit.json"), confidence=0.5))))
-        example = load("inferred.json")
+        example = dict(load("explicit.json"), confidence=0.5)
         for name in ("rejected.json", "tombstone.json"):
             for field in ("origin", "statement", "confidence", "scope", "source"):
                 with self.subTest(name=name, forbidden_field=field):
