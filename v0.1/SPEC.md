@@ -41,3 +41,7 @@ For an import, verify the source's right to share and the terms of reuse, show t
 ## Fixtures and checks
 
 The positive fixtures illustrate an explicit initial record, a concurrent inferred update, a payload-free owner rejection, and a tombstone. The negative fixtures exercise missing inference confidence and data included in a tombstone. `python3 test_fixtures.py` checks a scoped subset of structural and semantic rules; when the optional `jsonschema` package is installed it also checks fixtures against the draft-2020-12 schema, and otherwise reports that test as skipped. JSON Schema alone cannot compare a revision ID to its parent IDs or validate graph-wide cycles; those require semantic checks. These checks are not a complete sync implementation. A production implementation needs causal-graph and authorization tests, security review, and two real harness adapters before interoperability can be claimed.
+
+## Related proposals
+
+- [Continuity and learning from computer use](../proposals/continuity-activity-learning.md) explores a user-controlled learning direction. It is a research proposal and does not change the v0.1 wire format.
