@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mep"
+version = "0.1.0"
+description = "Model Ethos Protocol reference server: serve an owner's ethos over MCP, stdlib-only"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+dependencies = []
+
+[project.scripts]
+mep = "mep.__main__:main"
+
+[tool.setuptools]
+packages = ["mep"]

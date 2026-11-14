@@ -1,0 +1,16 @@
+ethos
+Copyright 2026 Moissanite Labs
+
+This product includes software developed at Moissanite Labs
+(https://github.com/Moissanite-Labs).
+
+Design lineage and credit:
+
+- Framework and integrity design: ahrazzle/soko
+  (https://github.com/ahrazzle/soko), Apache-2.0 where licensed.
+- Bounded-change and reading-response philosophy: Moissanite-Labs/weft-eido
+  (https://github.com/Moissanite-Labs/weft-eido), Apache-2.0.
+- Content model and governance: the Aska Digital corpus (private repository,
+  credit retained here per its attribution rules).
+- Preference revision specification: Ethos v0.1, this repository,
+  contributions by the ethos contributors.
