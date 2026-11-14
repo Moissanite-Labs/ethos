@@ -185,6 +185,27 @@ class FlowTests(unittest.TestCase):
         self.assertEqual(list((self.root / ".mep" / "proposals").glob("*.json")), [])
         self.assertTrue(list((self.root / ".mep" / "decided").glob("*.json")))
 
+    def test_decline_leaves_underlying_preference_alone(self):
+        first = correct(
+            self.root,
+            statement="Keep examples under five lines.",
+            scope_contexts=["writing"],
+            source_kind="user",
+            source_reference="owner-session",
+            owner_id=OWNER,
+        )
+        pref = first["revision"]["preference_id"]
+        proposal = self._proposal(preference_id=pref)
+        rev_id = proposal["proposal"]["revision_id"]
+        decide(self.root, target_revision_id=rev_id, decision="decline", owner_id=OWNER)
+        graph = load_graph(self.root)
+        self.assertEqual(graph["proposals"], [])
+        self.assertTrue((self.root / ".mep" / "decided" / f"{rev_id}.json").is_file())
+        effective = effective_preferences(graph, load_approvals(self.root))
+        entry = effective["preferences"][pref]
+        self.assertEqual(entry["state"], "applied")
+        self.assertEqual(entry["origin"], "explicit")
+
     def test_reject_suppresses_preference(self):
         proposal = self._proposal()
         rev_id = proposal["proposal"]["revision_id"]

@@ -110,7 +110,7 @@ The reference server ports the soko-verified-mcp framework to this job:
 | `ethos_heads` | Causal heads, contested and suppressed preferences. |
 | `ethos_history` | The revision graph, optionally for one preference. |
 | `ethos_propose` | Write a proposal. Never applies on its own. |
-| `ethos_decide` | Owner decision: approve, reject or delete. |
+| `ethos_decide` | Owner decision: approve, decline, reject or delete. |
 | `ethos_correct` | Owner path: write an explicit revision into the canon. |
 | `ethos_export` | Portable bundle with a manifest. Refuses a broken graph. |
 | `ethos_integrity` | Verify the tree against `SHA256SUMS`, or rewrite it after review. |
@@ -177,11 +177,15 @@ any change the owner cannot find in `ethos_history`.
 | --- | --- | --- |
 | Harness | Read, query, serve, export on request | Approve a proposal. Write history |
 | Agent | Propose revisions and flag drift | Apply its own proposals. Approve anything |
-| Owner | Correct, approve, reject, delete, export, publish | Retroactively rewrite a revision (record a new one) |
+| Owner | Correct, approve, decline, reject, delete, export, publish | Retroactively rewrite a revision (record a new one) |
 
-The owner's actions travel through `ethos_correct` and `ethos_decide`. Both
-write records. Neither edits records. The harness should confirm with the
-human before calling either, the same as any irreversible tool.
+The owner's actions travel through `ethos_correct` and `ethos_decide`. `ethos_decide`
+has four outcomes with distinct semantics: `approve` makes a proposal canonical,
+`decline` archives it with no effect, `reject` writes a rejected revision naming
+all current heads so the preference is suppressed until a later correction
+reactivates it, and `delete` writes a tombstone with the same effect. Both tools
+write records. Neither edits records. The harness should confirm with the human
+before calling either, the same as any irreversible tool.
 
 ## Export and sharing
 

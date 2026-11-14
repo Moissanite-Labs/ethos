@@ -151,12 +151,12 @@ TOOLS: List[Dict[str, Any]] = [
     {
         "name": "ethos_decide",
         "title": "Owner Decision on a Proposal (Approve, Reject, Delete)",
-        "description": "approve: the proposal becomes canonical and an approval is recorded. reject: a rejected revision is written naming all current heads. delete: a tombstone is written naming all current heads. History is never rewritten. The harness should confirm with the human before calling this.",
+        "description": "approve: the proposal becomes canonical and an approval is recorded. decline: the proposal is archived with no effect; the underlying preference keeps whatever effect it had. reject: a rejected revision naming all current heads is written; the preference is suppressed until you reactivate it with ethos_correct. delete: a tombstone naming all current heads; same suppression, distinct state. The harness should confirm with the human before calling this.",
         "inputSchema": {
             "type": "object",
             "properties": {
                 "target_revision_id": {"type": "string"},
-                "decision": {"type": "string", "enum": ["approve", "reject", "delete"]},
+                "decision": {"type": "string", "enum": ["approve", "decline", "reject", "delete"]},
                 "owner_id": {"type": "string"},
                 "note": {"type": "string", "default": ""},
             },

@@ -266,11 +266,35 @@ def _structure_records(graph: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def heads(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    """Causal heads per preference: revisions nobody supersedes."""
-    by_id = {r["revision_id"] for r in records}
-    superseded = {p for r in records for p in r["parent_revision_ids"]}
+    """Causal heads per preference: records nobody supersedes.
+
+    Archived (decided) records are not candidates. An archived record still
+    supersedes its parents, but only once something else claims the
+    archived record's position. A record the owner plainly declined claims
+    nothing, so its supersession edge is void and the base preference resumes
+    effect. A record superseded by a later correction or tombstone keeps its
+    edge, so the whole chain resolves to a single head.
+    """
+    visible = [r for r in records if not r.get("_archived")]
+    archived = [r for r in records if r.get("_archived")]
+    superseded = {p for r in visible for p in r["parent_revision_ids"]}
+    # Expand through archived records, each at most once, until no new parent
+    # appears. An archived record superseded by something claims its parents.
+    expanded: set[str] = set()
+    queue = sorted(superseded)
+    while queue:
+        current = queue.pop(0)
+        if current in expanded:
+            continue
+        expanded.add(current)
+        for record in archived:
+            if record["revision_id"] == current:
+                for parent in record["parent_revision_ids"]:
+                    if parent not in superseded:
+                        superseded.add(parent)
+                        queue.append(parent)
     per_pref: dict[str, list[dict[str, Any]]] = {}
-    for record in records:
+    for record in visible:
         if record["revision_id"] not in superseded:
             per_pref.setdefault(record["preference_id"], []).append(record)
     for pref in per_pref:
@@ -641,12 +665,17 @@ def decide(
 
     decision must be one of:
       approve  - the proposal becomes canonical; approval is recorded
-      reject   - a rejected revision is written naming all current heads
-      delete   - a tombstone is written naming all current heads
+      decline  - the proposal is archived, nothing changes; the underlying
+                 preference keeps whatever effect it had
+      reject   - a rejected revision is written naming all current heads;
+                 the preference is suppressed until you reactivate it with
+                 ethos_correct naming these heads as parents
+      delete   - a tombstone is written naming all current heads; same
+                 suppression semantics, distinct state
     """
     root = Path(root)
-    if decision not in ("approve", "reject", "delete"):
-        raise ValueError("decision must be approve, reject or delete")
+    if decision not in ("approve", "decline", "reject", "delete"):
+        raise ValueError("decision must be approve, decline, reject or delete")
     graph = load_graph(root)
     proposals = {p["revision_id"]: p for p in graph["proposals"]}
     applied = {r["revision_id"]: r for r in graph["revisions"]}
@@ -683,6 +712,20 @@ def decide(
             "revision_id": target_revision_id,
             "preference_id": target["preference_id"],
             "path": str(dest.relative_to(root)),
+        }
+    if decision == "decline":
+        if not target_is_proposal:
+            raise ValueError("decline applies to proposals; for canonical records use reject or delete")
+        source_path = _store_dir(root, PROPOSALS_DIR) / f"{target_revision_id}.json"
+        archive = _store_dir(root, DECIDED_DIR) / f"{target_revision_id}.json"
+        archive.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(source_path), str(archive))
+        return {
+            "decision": "decline",
+            "revision_id": target_revision_id,
+            "preference_id": target["preference_id"],
+            "archived_to": str(archive.relative_to(root)),
+            "effect": "none; the underlying preference keeps whatever effect it had",
         }
     # reject or delete: write a new revision that names all current heads.
     status = "rejected" if decision == "reject" else "deleted"
