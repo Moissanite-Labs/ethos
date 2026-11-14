@@ -2,6 +2,17 @@
 
 Dated record of every change to this repository and its reason. Newest first.
 
+## 2026-11-14: Capture the marketplace provenance session as research
+
+Added `docs/research/2026-11-14-marketplace-provenance.md` with the verbatim
+source beside it. The session proposes cryptographic and geometric
+provenance for weight-space taste packets. Watermarking and spectral
+attribution are real techniques. The zero-knowledge claim is mislabeled
+(deterministic check suffices) and enforceability still requires host-side
+projection at load time, which nobody ships. The importable idea is a
+signed lineage DAG plus a royalty ledger on ethos export bundles. No protocol
+changes.
+
 ## 2026-11-14: Capture the taste-marketplace session as research
 
 Added `docs/research/2026-11-14-taste-marketplace.md` with the verbatim
