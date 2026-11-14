@@ -2,6 +2,17 @@
 
 Dated record of every change to this repository and its reason. Newest first.
 
+## 2026-11-14: Ethos convergence proposal (opn-eve)
+
+Added `docs/proposal/2026-11-14-ethos-convergence.md`, a synthesis of the
+MCP deep-dive, W-MCP, AlphaEdit and marketplace sessions into one
+architecture: two planes (legible Plane 1, compiled Plane 2) and one
+compiler. It proposes a lineage DAG on exports, invariant documents, the
+SEP-2133 extension, a Lean 4 verified core, and a text-space catalogue
+profile. Proposal, not implemented. Reason: the sessions individually
+converge on this shape. It should be on the record as one proposal rather
+than four captures.
+
 ## 2026-11-14: Capture the marketplace provenance session as research
 
 Added `docs/research/2026-11-14-marketplace-provenance.md` with the verbatim
