@@ -2,6 +2,15 @@
 
 Dated record of every change to this repository and its reason. Newest first.
 
+## 2026-11-14: Capture AlphaEdit and the SC-WSP proposal as research
+
+Added `docs/research/2026-11-14-alphaedit-and-scwsp.md` with the verbatim
+source beside it. AlphaEdit is real and checks out (ICLR 2025 Oral,
+Outstanding Paper, arXiv:2410.02355). SC-WSP is a design hypothesis, not a
+published method. Reason: these ideas sharpen the enforcement axis (A2) as a
+proposal for invariant-flagged documents, and they give better vocabulary to
+the verified-core track (A3). No protocol changes.
+
 ## 2026-11-14: Capture the MCP deep-dive session as research
 
 Added `docs/research/`: the processed notes from a conversation the owner
