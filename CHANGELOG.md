@@ -2,6 +2,16 @@
 
 Dated record of every change to this repository and its reason. Newest first.
 
+## 2026-11-14: Capture the MCP deep-dive session as research
+
+Added `docs/research/`: the processed notes from a conversation the owner
+captured from another assistant, the verbatim export, and the W-MCP sketch it
+produced. No protocol changes. Reason: the session's conclusions about MCP
+governance (SEPs, extensions, Tasks) and verified servers are inputs to the
+MEP roadmap, and capture at the point of learning is cheaper than
+reconstruction. Claims were spot-checked against primary sources on capture.
+The notes record what held and what did not.
+
 ## 2026-11-13: MEP v0.1, the Model Ethos Protocol and reference server
 
 Added MEP.md, the forkable `template/`, and `mep/`, a stdlib-only Python MCP
