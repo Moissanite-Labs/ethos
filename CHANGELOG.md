@@ -2,6 +2,23 @@
 
 Dated record of every change to this repository and its reason. Newest first.
 
+## 2026-11-14: Capture the taste compositor prototype
+
+Added `docs/research/prototypes/2026-11-14-taste-compositor.py` and
+`prototypes/2026-11-14-taste-compositor-fixcheck.py`, with the analysis in
+`docs/research/2026-11-14-compositor-prototype.md`. The prototype runs as
+given. Its own leakage check prints a spurious 6.93 because it measures the
+wrong matrix product. The corrected invariant holds at 3.7e-15. Reference
+only; not MEP code; weight-space track remains parked.
+
+## 2026-11-14: Capture the SC-WSP Technical Architecture Brief
+
+Added `docs/research/2026-11-14-scwsp-brief.md` and the generator verbatim in
+`docs/research/prototypes/`. The PDF was not readable by the capturing model;
+the audit is from the source HTML. The brief's footer claim of K0 dW under
+1e-14 is false for the printed product (measured 6.93). The correct invariant
+holds at 3.7e-15. Not adopted and not citeable as written. No code changes.
+
 ## 2026-11-14: Ethos convergence proposal (opn-eve)
 
 Added `docs/proposal/2026-11-14-ethos-convergence.md`, a synthesis of the
