@@ -2,6 +2,17 @@
 
 Dated record of every change to this repository and its reason. Newest first.
 
+## 2026-11-14: Capture the taste-marketplace session as research
+
+Added `docs/research/2026-11-14-taste-marketplace.md` with the verbatim
+source beside it. The session maps a subjective taste profile to a
+low-rank null-space-projected weight packet, then extends it to a
+multi-profile marketplace algebra. Every cited method exists (Bradley-Terry,
+contrastive steering, TIES-merging, SLERP). The synthesis does not, and the
+weight-space variant trades MEP's one non-negotiable (a gate the host can
+inspect) for a capability it cannot audit. The buildable marketplace is a
+MEP catalogue profile in text space. No protocol changes.
+
 ## 2026-11-14: Capture AlphaEdit and the SC-WSP proposal as research
 
 Added `docs/research/2026-11-14-alphaedit-and-scwsp.md` with the verbatim
