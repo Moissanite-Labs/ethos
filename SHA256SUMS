@@ -9,6 +9,7 @@ b41d31f24e297128617a37239ed8d32f75ce484c3c4ec9eb5a03973a23e5bbe0  MEP.md
 e7a4910e243895678105c32e3344846c57c636ead2f6f1f5384105694d11a436  docs/proposal/2026-11-14-ethos-convergence.md
 a6d209c2ac9e5f6091d0e45676d2f53e87de0606e5e9bad815d7da7cc677cddc  docs/research/2026-11-14-alphaedit-and-scwsp-raw.md
 98179d7e0ec43bc61b9a806a27027382dc45d47c8f94e4d8bac1e720c83661fe  docs/research/2026-11-14-alphaedit-and-scwsp.md
+948fd69bf4f034b4cc1b50ad37c9ad4908fa05272e375985a0eaa2509d475032  docs/research/2026-11-14-compositor-prototype.md
 91bc0a30c00588e210d78f8b1b91b7d203078f216411e438bfc1d177002231a8  docs/research/2026-11-14-marketplace-provenance-raw.md
 d93e9ff65d8416fc093e98ed777914556ee903f3a213157887847ca245f7f4d3  docs/research/2026-11-14-marketplace-provenance.md
 336a60fe1d763001c1d1da68531cbf398ceaa75b600a0122a039cc5080fecd8d  docs/research/2026-11-14-mcp-session-notes.md
@@ -16,6 +17,8 @@ bb0a09f2509c2cf08a17cd098c628d10a581652a59ee76fddb5fe5ae0b5deb74  docs/research/
 c389587fd0ca7dfc2faa298130fb60b04a1505fb756d6b26839e98b3a1fc4529  docs/research/2026-11-14-taste-marketplace-raw.md
 d09ca1a6596e8876cf51caa89ad3b119175ad0f12bbbce5304c56db7d786a820  docs/research/2026-11-14-taste-marketplace.md
 fb885e1c4ae8501a180aadbbd96af8dc41c65c256a66a60cf7d8e21704e7cf49  docs/research/2026-11-14-w-mcp-sketch.md
+03eb4db1f7ad1b7bb04a2259c63f589b2be2dff36f0e59eb7e2ef50f26737965  docs/research/prototypes/2026-11-14-taste-compositor-fixcheck.py
+19c9530b65ee939565af228676c48f620c2b392c1b6fe008d6fc2096785f2e89  docs/research/prototypes/2026-11-14-taste-compositor.py
 de6cffdd5232a777dd9066bc14de6a2ca078f823f375e6a3cbcfa681c5a1ce8c  mep/__init__.py
 6cb25e7a6924b1a12e37e95788fd3b776015bbed1aba4660a5ca402cea81713a  mep/__main__.py
 c3f4fde0272932d9e9ab43e2aa9e2faf57ab53a7a30bb4722aef92731ee39041  mep/bundle.py
