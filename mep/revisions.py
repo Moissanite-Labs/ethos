@@ -15,9 +15,10 @@ Authority model
   otherwise the nearest applicable owner-confirmed explicit ancestor applies.
 - **ethos_correct** is the owner's direct path: it writes an explicit
   revision straight into the canonical store.
-- **ethos_decide** is how a proposal becomes canonical (approve) or ceases to
-  apply (reject, delete). Rejection and deletion are new revisions that name
-  all current heads as parents; history is never rewritten.
+- **ethos_decide** is how a proposal becomes canonical (approve), ceases to
+  apply (decline, no effect on the base preference), or suppresses the
+  preference (reject, delete). Rejection and deletion are new revisions that
+  name all current heads as parents; history is never rewritten.
 
 State layout under the root (all inside ``.mep/``)
 --------------------------------------------------
